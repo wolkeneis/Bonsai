@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "261869740964",
+    "project_id": "wolkeneis",
+    "storage_bucket": "wolkeneis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261869740964:android:50ff1955a502830ff41731",
+        "android_client_info": {
+          "package_name": "dev.wolkeneis.bonsai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261869740964-hh4sete5gt4um1vb0nbfq6ujr3vi9qi2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.wolkeneis.bonsai",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "261869740964-r2ad64780gj90l88adib0hcbk6hjduq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRWFIdsHQm25g23jx2payT0azPaTbdxaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "261869740964-r2ad64780gj90l88adib0hcbk6hjduq2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
