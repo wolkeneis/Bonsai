@@ -5,6 +5,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useSelector} from 'react-redux';
 import Home from './component/home/Home';
 import Settings from './component/settings/Settings';
+import {
+  cacheConfig,
+  cachePackets,
+  cacheProfile,
+  cacheUsers,
+} from './logic/caching';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,6 +33,7 @@ const App = () => {
 
   return (
     <>
+      <Cache />
       <Tab.Navigator
         initialRouteName="HomeScreen"
         screenOptions={{
@@ -73,6 +80,42 @@ const App = () => {
       </Snackbar>
     </>
   );
+};
+
+const Cache = () => {
+  const doneLoading = useSelector(state => state.config.doneLoading);
+  const config = useSelector(state => state.config);
+  const profile = useSelector(state => state.social.profile);
+  const contacts = useSelector(state => state.social.contacts);
+  const users = useSelector(state => state.social.users);
+  const userCache = useSelector(state => state.social.userCache);
+  const packets = useSelector(state => state.social.packets);
+
+  useEffect(() => {
+    if (doneLoading) {
+      cacheConfig();
+    }
+  }, [doneLoading, config]);
+
+  useEffect(() => {
+    if (doneLoading && profile) {
+      cacheProfile();
+    }
+  }, [doneLoading, profile]);
+
+  useEffect(() => {
+    if (doneLoading) {
+      cacheUsers();
+    }
+  }, [doneLoading, contacts, users, userCache]);
+
+  useEffect(() => {
+    if (doneLoading) {
+      cachePackets();
+    }
+  }, [doneLoading, packets]);
+
+  return <></>;
 };
 
 export default App;

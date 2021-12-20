@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {Snackbar} from 'react-native-paper';
-import {openSettings} from 'react-native-permissions';
 import {default as QRCodeScannerComponent} from 'react-native-qrcode-scanner';
 import {useDispatch, useSelector} from 'react-redux';
 import {addContact as addRemoteContact} from '../../logic/contacts';
@@ -12,14 +11,6 @@ const QRCodeScanner = ({navigation}) => {
   const connected = useSelector(state => state.social.connected);
   const [connectionWarningVisible, setConnectionWarningVisible] =
     useState(false);
-  const [androidPermissionWarningVisible, setAndroidPermissionWarningVisible] =
-    useState(false);
-
-  useEffect(() => {
-    if (Platform.OS === 'android' && Platform.constants.Release > 10) {
-      setAndroidPermissionWarningVisible(true);
-    }
-  }, []);
 
   const onSuccess = event => {
     if (!connected) {
@@ -55,15 +46,6 @@ const QRCodeScanner = ({navigation}) => {
           onPress: () => setConnectionWarningVisible(false),
         }}>
         You're offline, check your connection and try again!
-      </Snackbar>
-      <Snackbar
-        visible={androidPermissionWarningVisible}
-        onDismiss={() => setAndroidPermissionWarningVisible(false)}
-        action={{
-          label: 'Settings',
-          onPress: () => openSettings().catch(() => {}),
-        }}>
-        If you have a black screen, change the camera permissions!
       </Snackbar>
     </View>
   );

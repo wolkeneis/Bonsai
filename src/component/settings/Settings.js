@@ -3,6 +3,7 @@ import React, {Suspense} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Button} from 'react-native-paper';
 import ContactSettings from './ContactSettings';
+import GeneralSettings from './GeneralSettings';
 import Login from './Login';
 import ProfileSettings from './ProfileSettings';
 import QRCode from './QRCode';
@@ -18,6 +19,7 @@ const Settings = () => {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Security" component={SecurityScreen} />
+      <Stack.Screen name="General" component={GeneralScreen} />
       <Stack.Screen name="Contacts" component={ContactScreen} />
       <Stack.Screen name="QR Code" component={QRCodeScreen} />
       <Stack.Screen name="QR Code Scanner" component={QRCodeScannerScreen} />
@@ -41,6 +43,13 @@ const SettingsScreen = ({navigation}) => {
         mode="contained"
         onPress={() => navigation.navigate('Security')}>
         Security
+      </Button>
+      <Button
+        style={styles.settingButton}
+        icon="cog"
+        mode="contained"
+        onPress={() => navigation.navigate('General')}>
+        General
       </Button>
       <Button
         style={styles.settingButton}
@@ -80,6 +89,14 @@ const SecurityScreen = ({navigation}) => {
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
       <SecuritySettings navigation={navigation} />
+    </Suspense>
+  );
+};
+
+const GeneralScreen = ({navigation}) => {
+  return (
+    <Suspense fallback={<ActivityIndicator size="large" />}>
+      <GeneralSettings navigation={navigation} />
     </Suspense>
   );
 };

@@ -11,10 +11,11 @@ import {
   Text,
 } from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
+import {deleteCache} from '../../logic/caching';
 import {
   fetchProfile,
   fetchProfileConnections,
-  logout,
+  logout as remoteLogout,
   providers,
   updatePrivacy,
 } from '../../logic/profile';
@@ -95,6 +96,11 @@ const Profile = ({navigation, profile}) => {
     );
   };
 
+  const logout = () => {
+    remoteLogout().then(() => navigation.popToTop());
+    deleteCache();
+  };
+
   return (
     <>
       <Card style={styles.profileCard}>
@@ -111,9 +117,7 @@ const Profile = ({navigation, profile}) => {
           <Paragraph>Private Profile</Paragraph>
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => logout().then(() => navigation.popToTop())}>
-            Log out
-          </Button>
+          <Button onPress={logout}>Log out</Button>
         </Card.Actions>
       </Card>
       {connections !== undefined && (

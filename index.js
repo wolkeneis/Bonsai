@@ -14,7 +14,9 @@ import {
 import {Provider as ReduxProvider} from 'react-redux';
 import {name as appName} from './app.json';
 import App from './src/App';
+import {loadCache} from './src/logic/caching';
 import {initializeKeys} from './src/logic/signal';
+import {setDoneLoading} from './src/redux/configSlice';
 import store from './src/redux/store';
 
 const Main = () => {
@@ -41,7 +43,10 @@ const Main = () => {
     : NavigationDefaultTheme;
 
   useEffect(() => {
-    initializeKeys();
+    loadCache().then(() => {
+      store.dispatch(setDoneLoading());
+      initializeKeys();
+    });
   }, []);
 
   const backgroundStyle = {
