@@ -1,9 +1,10 @@
-import {REACT_APP_EISWALD_NODE, REACT_APP_WALDERDE_NODE} from '@env';
+import {REACT_APP_ACCOUNT_NODE, REACT_APP_WALDERDE_NODE} from '@env';
 import React from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import {Button, Card, List} from 'react-native-paper';
 import WebView from 'react-native-webview';
 import {providers} from '../../logic/profile';
+import {reconnect} from '../../logic/signal';
 
 const Login = ({navigation, provider}) => {
   var webview = null;
@@ -15,11 +16,12 @@ const Login = ({navigation, provider}) => {
 
     if (
       url.includes(
-        `${REACT_APP_EISWALD_NODE || 'https://eiswald.wolkeneis.dev'}/redirect`,
+        `${REACT_APP_ACCOUNT_NODE || 'https://wolkeneis.dev'}/redirect`,
       )
     ) {
       webview.stopLoading();
       if (url.includes('/redirect/profile')) {
+        reconnect();
         navigation.popToTop();
         navigation.navigate('Profile');
       } else {

@@ -2,8 +2,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {Suspense} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Button} from 'react-native-paper';
+import ContactSettings from './ContactSettings';
 import Login from './Login';
-import ProfileSettins from './ProfileSettings';
+import ProfileSettings from './ProfileSettings';
+import QRCode from './QRCode';
+import QRCodeScanner from './QRCodeScanner';
+import SecuritySettings from './SecuritySettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +17,10 @@ const Settings = () => {
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Security" component={SecurityScreen} />
+      <Stack.Screen name="Contacts" component={ContactScreen} />
+      <Stack.Screen name="QR Code" component={QRCodeScreen} />
+      <Stack.Screen name="QR Code Scanner" component={QRCodeScannerScreen} />
     </Stack.Navigator>
   );
 };
@@ -27,6 +35,20 @@ const SettingsScreen = ({navigation}) => {
         onPress={() => navigation.navigate('Profile')}>
         Profile
       </Button>
+      <Button
+        style={styles.settingButton}
+        icon="shield-lock-outline"
+        mode="contained"
+        onPress={() => navigation.navigate('Security')}>
+        Security
+      </Button>
+      <Button
+        style={styles.settingButton}
+        icon="contacts"
+        mode="contained"
+        onPress={() => navigation.navigate('Contacts')}>
+        Contacts
+      </Button>
     </View>
   );
 };
@@ -34,7 +56,7 @@ const SettingsScreen = ({navigation}) => {
 const ProfileScreen = ({navigation}) => {
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      <ProfileSettins navigation={navigation} />
+      <ProfileSettings navigation={navigation} />
     </Suspense>
   );
 };
@@ -54,14 +76,47 @@ const LoginScreen = ({navigation, route}) => {
   );
 };
 
+const SecurityScreen = ({navigation}) => {
+  return (
+    <Suspense fallback={<ActivityIndicator size="large" />}>
+      <SecuritySettings navigation={navigation} />
+    </Suspense>
+  );
+};
+
+const ContactScreen = ({navigation}) => {
+  return (
+    <Suspense fallback={<ActivityIndicator size="large" />}>
+      <ContactSettings navigation={navigation} />
+    </Suspense>
+  );
+};
+
+const QRCodeScreen = ({navigation}) => {
+  return (
+    <Suspense fallback={<ActivityIndicator size="large" />}>
+      <QRCode navigation={navigation} />
+    </Suspense>
+  );
+};
+
+const QRCodeScannerScreen = ({navigation}) => {
+  return (
+    <Suspense fallback={<ActivityIndicator size="large" />}>
+      <QRCodeScanner navigation={navigation} />
+    </Suspense>
+  );
+};
+
 export default Settings;
 
 const styles = StyleSheet.create({
   settingsScreen: {
-    marginTop: 8,
+    paddingVertical: 8,
   },
   settingButton: {
-    margin: 8,
+    marginVertical: 8,
+    marginHorizontal: 16,
     padding: 16,
   },
 });

@@ -35,11 +35,14 @@ function fetchImageSource(avatar) {
       .then(response => response.blob())
       .then(blob => blobToBase64(blob))
       .then(image => image)
-      .catch(() => {}),
+      .catch(() => null),
   );
 }
 
 function blobToBase64(blob) {
+  if (blob.size <= 0) {
+    return null;
+  }
   const reader = new FileReader();
   reader.readAsDataURL(blob);
   return new Promise(resolve => {

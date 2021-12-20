@@ -1,5 +1,5 @@
-import React, {Suspense, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import React, {Suspense, useCallback, useEffect, useState} from 'react';
+import {RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import {
   ActivityIndicator,
   Avatar,
@@ -10,7 +10,7 @@ import {
   Switch,
   Text,
 } from 'react-native-paper';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchProfile,
   fetchProfileConnections,
@@ -19,17 +19,36 @@ import {
   updatePrivacy,
 } from '../../logic/profile';
 import {fetchImageSource} from '../../logic/utils';
+import {setPrivateProfile, setProfile} from '../../redux/socialSlice';
 
 const ProfileSettings = ({navigation}) => {
+  const [refreshing, setRefreshing] = useState();
   const profile = useSelector(state => state.social.profile);
+  const dispatch = useDispatch();
+
+  const updateProfile = useCallback(() => {
+    setRefreshing(true);
+    fetchProfile().then(profile => {
+      dispatch(setProfile(profile));
+      dispatch(setPrivateProfile(profile ? profile.private : false));
+      setRefreshing(false);
+    });
+  }, [dispatch]);
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    updateProfile();
+  }, [updateProfile]);
 
   return (
-    <ScrollView style={styles.settings}>
-      {profile !== undefined ? (
+    <ScrollView
+      style={styles.settings}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => updateProfile()}
+        />
+      }>
+      {profile !== undefined && (
         <Suspense fallback={<ActivityIndicator size="large" />}>
           {profile !== null ? (
             <Profile navigation={navigation} profile={profile} />
@@ -44,8 +63,6 @@ const ProfileSettings = ({navigation}) => {
             </Card>
           )}
         </Suspense>
-      ) : (
-        <ActivityIndicator size="large" />
       )}
     </ScrollView>
   );
@@ -99,7 +116,7 @@ const Profile = ({navigation, profile}) => {
           </Button>
         </Card.Actions>
       </Card>
-      {connections !== undefined ? (
+      {connections !== undefined && (
         <>
           {connections !== null ? (
             <>
@@ -116,8 +133,6 @@ const Profile = ({navigation, profile}) => {
             <Text>Error</Text>
           )}
         </>
-      ) : (
-        <ActivityIndicator size="large" />
       )}
     </>
   );
@@ -186,8 +201,12 @@ const Connection = ({navigation, provider, connection}) => {
 export default ProfileSettings;
 
 const styles = StyleSheet.create({
+  settings: {
+    marginVertical: 4,
+  },
   profileCard: {
-    margin: 8,
+    marginVertical: 4,
+    marginHorizontal: 8,
   },
   cardContent: {
     flexDirection: 'row',

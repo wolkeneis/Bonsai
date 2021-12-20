@@ -1,10 +1,7 @@
 import {REACT_APP_WALDERDE_NODE} from '@env';
-import {
-  setConnections,
-  setPrivateProfile,
-  setProfile,
-} from '../redux/socialSlice';
+import {setConnections, setPrivateProfile} from '../redux/socialSlice';
 import store from '../redux/store';
+import {reconnect} from './signal';
 
 const providers = [
   {
@@ -30,9 +27,11 @@ const providers = [
 ];
 
 function fetchProfile() {
-  fetch(
+  return fetch(
     new Request(
-      `${REACT_APP_WALDERDE_NODE || 'https://walderde.wolkeneis.dev'}/profile`,
+      `${
+        process.env.REACT_APP_WALDERDE_NODE || 'https://walderde.wolkeneis.dev'
+      }/profile`,
       {
         method: 'POST',
         credentials: 'include',
@@ -41,11 +40,7 @@ function fetchProfile() {
   )
     .then(response => response.json())
     .then(profile => profile)
-    .catch(() => null)
-    .then(profile => {
-      store.dispatch(setProfile(profile));
-      store.dispatch(setPrivateProfile(profile ? profile.private : false));
-    });
+    .catch(() => null);
 }
 
 function logout() {
@@ -60,8 +55,8 @@ function logout() {
       },
     ),
   )
-    .then(() => {})
-    .catch(() => {});
+    .then(() => reconnect())
+    .catch(() => reconnect());
 }
 
 function fetchProfileConnections() {
@@ -104,7 +99,6 @@ function updatePrivacy(privateProfile) {
     .then(profile => profile)
     .catch(() => {})
     .then(profile => {
-      store.dispatch(setProfile(profile));
       store.dispatch(setPrivateProfile(profile ? profile.private : false));
     });
 }
